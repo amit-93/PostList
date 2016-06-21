@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -175,7 +175,7 @@ namespace PostList.ViewModels
              string Format = CopyCommand.ToString();
              try
              {
-                 IFormat = Formatter.GetFormter(Format);
+                 IFormat = Formatter.GetFormatter(Format);
 
                  if (IFormat == null)
                  {
