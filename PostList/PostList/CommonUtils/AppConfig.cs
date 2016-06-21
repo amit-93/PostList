@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -14,9 +14,11 @@ namespace PostList
 
             try
             {
+
+
                 var appSettings = ConfigurationManager.AppSettings;
 
-                if (appSettings.Count == 0)
+                if (appSettings.Count == 0 || ConfigKey==null || ConfigKey.Count==0)
                 {
                     Exception = Constant.Error;
                 }
@@ -27,8 +29,7 @@ namespace PostList
                         ConfigValue.Add(key,appSettings[key]);
                     }
 
-                    if (ConfigValue.Count==0)
-                        Exception = Constant.Error;
+                  
                 }
 
 
