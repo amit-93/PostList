@@ -1,27 +1,42 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace PostList
 {
     public class Formatter
     {
 
-        public static IFormatter GetFormter(string Format)
+        static List<string> ConfigKey;
+        static Dictionary<string, string> ConfigValue;
+
+
+        public static IFormatter GetFormatter(string Format)
         {
-            IFormatter IFormat=null;
+            string ClassName = "";
+            IFormatter IFormat = null;
+            string AssemblyName="";
+
             try
             {
-                switch (Format)
+                ConfigKey = new List<string>();
+                ConfigKey.Add(Constant.Plain);
+                ConfigKey.Add(Constant.Json);
+                ConfigKey.Add(Constant.Html);
+                ConfigValue = AppConfig.ReadConfig(ConfigKey);
+                AssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+
+                if (ConfigValue == null || ConfigValue.Count == 0 || string.IsNullOrWhiteSpace(AssemblyName))
                 {
-                    case "Plain":
-                            IFormat=new PlainData();
-                        break;
-                    case "Json":
-                           IFormat=new JSonData();
-                        break;
-                    case "Html":
-                         IFormat=new HtmlData();
-                        break;
+                    ExceptionHandling.ShowException(Constant.Error);
+                    return null;
                 }
+
+                ClassName = ConfigValue[Format];
+                Assembly asm = Assembly.Load(AssemblyName); 
+                Type type = asm.GetType(AssemblyName+"."+ ClassName);
+                var obj = Activator.CreateInstance(type);
+                IFormat = (IFormatter)obj;
             }
             catch(Exception ex)
             {
