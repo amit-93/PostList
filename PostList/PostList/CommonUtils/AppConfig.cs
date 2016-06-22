@@ -1,37 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 
 namespace PostList
 {
     public class AppConfig
     {
+        public static Dictionary<string, string> ConfigValue = null;
 
-        public static Dictionary<string, string> ReadConfig(List<string> ConfigKey)
+        public static Dictionary<string, string> ReadConfig()
         {
             string Exception = "";
-            Dictionary<string, string> ConfigValue = new Dictionary<string, string>();
-
             try
             {
-
-
                 var appSettings = ConfigurationManager.AppSettings;
 
-                if (appSettings.Count == 0 || ConfigKey==null || ConfigKey.Count==0)
+                if (appSettings.Count == 0)
                 {
                     Exception = Constant.Error;
                 }
                 else
                 {
-                    foreach (var key in ConfigKey)
+                    var Section = (NameValueCollection)ConfigurationManager.GetSection("appSettings");
+                    ConfigValue = new Dictionary<string, string>();
+                    foreach (var key in Section.AllKeys)
                     {
-                        ConfigValue.Add(key,appSettings[key]);
+                        ConfigValue.Add(key,Section[key].ToString());
                     }
-
-                  
                 }
-
 
                 if (!string.IsNullOrWhiteSpace(Exception))
                 {
