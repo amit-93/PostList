@@ -17,12 +17,10 @@ namespace PostList.ViewModels
         #region propetries
 
         public event PropertyChangedEventHandler PropertyChanged;
-         ObservableCollection<PostData> postList;
-         ObservableCollection<PostData> PagingPostList;
+        ObservableCollection<PostData> postList;
+        ObservableCollection<PostData> PagingPostList;
         PostData selectedItem;
         HttpResponseMessage Response = null;
-        List<string> ConfigKey;
-        Dictionary<string, string> ConfigValue; 
         int start = 0;
         int end = 0;
         int itemCount = 5;
@@ -104,13 +102,9 @@ namespace PostList.ViewModels
         {
             try
             {
-                ConfigKey = new List<string>();
-                ConfigKey.Add(Constant.WebAPIServer);
-                ConfigKey.Add(Constant.PostListURL);
-                ConfigValue = AppConfig.ReadConfig(ConfigKey);
+                AppConfig.ReadConfig();
 
-
-                if (ConfigValue == null || ConfigValue.Count==0)
+                if (AppConfig.ConfigValue == null || AppConfig.ConfigValue.Count == 0)
                 {
                     ExceptionHandling.ShowException(Constant.Error);
                     return;
@@ -129,8 +123,8 @@ namespace PostList.ViewModels
             ObservableCollection<PostData> PostList = null;
              try
              {
-                
-                 Response = HttpRequestUtil.HttpClientRequest(ConfigValue[ConfigKey[0]], ConfigValue[ConfigKey[1]]);
+
+                 Response = HttpRequestUtil.HttpClientRequest(AppConfig.ConfigValue[Constant.WebAPIServer], AppConfig.ConfigValue[Constant.PostListURL]);
                  if (Response == null)
                  {
                      ExceptionHandling.ShowException(Constant.Error);
