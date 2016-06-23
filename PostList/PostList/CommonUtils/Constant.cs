@@ -19,7 +19,7 @@ namespace PostList
         public const string Plain = "Plain";
         public const string Json = "Json";
         public const string Html = "Html";
-        public const string Error= "Some problem occured in application. Please contact administrator.";
+        public const string Error= "Problem occured in application. Please contact administrator.";
         public const string First = "First";
         public const string Previous = "Previous";
         public const string Last = "Last";
