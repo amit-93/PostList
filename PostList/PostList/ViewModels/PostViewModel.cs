@@ -79,12 +79,6 @@ namespace PostList.ViewModels
 
         #endregion properties
 
-        #region constructor
-        public PostViewModel()
-        {
-        }
-        #endregion constructor
-
         #region private method
 
 
