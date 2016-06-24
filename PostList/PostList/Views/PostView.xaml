@@ -4,9 +4,6 @@
         Title="PostView" Height="350" Width="525"
         xmlns:ViewModels="clr-namespace:PostList.ViewModels" 
         xmlns:Paging="clr-namespace:PostList.Paging"  >
-    <Window.Resources>
-        <ViewModels:PostViewModel x:Key="PostKey"></ViewModels:PostViewModel>
-    </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Visible">
     <StackPanel>
         <DataGrid x:Name="PostList" Grid.Column="0" Grid.Row="0"
