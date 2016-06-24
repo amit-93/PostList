@@ -82,7 +82,14 @@ namespace PostList.ViewModels
         #region constructor
         public PostViewModel()
         {
+        }
+        #endregion constructor
 
+        #region private method
+
+
+        public void Init()
+        {
             CopyCommand = new RelayCommand(new Action<object>(CopyContent));
 
             //read config file
@@ -91,11 +98,7 @@ namespace PostList.ViewModels
             PagingPostList = GetPostList();
             //paging
             ReloadPostList(Constant.First);
-         
         }
-        #endregion constructor
-
-        #region private method
 
 
         private void ReadConfig()
