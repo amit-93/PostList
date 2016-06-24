@@ -9,7 +9,7 @@
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Visible">
     <StackPanel>
-        <DataGrid x:Name="PostList" DataContext="{StaticResource PostKey}" Grid.Column="0" Grid.Row="0"
+        <DataGrid x:Name="PostList" Grid.Column="0" Grid.Row="0"
                                 AutoGenerateColumns="False" 
                                 ItemsSource="{Binding PostList}" RowDetailsVisibilityMode="VisibleWhenSelected"
                SelectedItem="{Binding SelectedItem}" >
@@ -41,7 +41,7 @@
         </DataGrid.Columns>
 
     </DataGrid>
-            <Paging:PageControl DataContext="{StaticResource PostKey}" ></Paging:PageControl>
+            <Paging:PageControl></Paging:PageControl>
     </StackPanel>
     </ScrollViewer>
 </Window>

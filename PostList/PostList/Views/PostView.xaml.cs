@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using PostList.ViewModels;
 
 namespace PostList
 {
@@ -11,6 +12,15 @@ namespace PostList
         public PostView()
         {
             InitializeComponent();
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
+
+            PostViewModel obj = new PostViewModel();
+            obj.Init();
+            this.DataContext = obj;
+         
         }
 
        
