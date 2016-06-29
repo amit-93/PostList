@@ -1,44 +1,51 @@
 ﻿<Window x:Class="PostList.PostView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PostView" Height="350" Width="525"
-        xmlns:ViewModels="clr-namespace:PostList.ViewModels" 
-        xmlns:Paging="clr-namespace:PostList.Paging"  >
-    <ScrollViewer VerticalScrollBarVisibility="Visible">
-    <StackPanel>
-        <DataGrid x:Name="PostList" Grid.Column="0" Grid.Row="0"
+        Title="PostView" Height="350" Width="700"
+        xmlns:Paging="clr-namespace:PostList.Paging"
+         >
+    <Window.Resources>
+        <Style TargetType="RadioButton">
+            <Setter Property="Background" Value="Beige"></Setter>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"  >
+        <StackPanel Background="AliceBlue"   Margin="80,50,50,80" >
+            
+            <Label Content="Post List View" FontSize="30" Background="Aqua"/>
+
+            <DataGrid x:Name="PostList" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto"
                                 AutoGenerateColumns="False" 
-                                ItemsSource="{Binding PostList}" RowDetailsVisibilityMode="VisibleWhenSelected"
+                                ItemsSource="{Binding PostList}" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" RowHeight="25"
                SelectedItem="{Binding SelectedItem}" >
 
-        <DataGrid.RowDetailsTemplate>
-            <DataTemplate>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="30" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Detail: " Grid.Row="0" Grid.Column="0" />
-                    <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Body}" Background="Transparent"  BorderThickness="0" IsTabStop="False" IsReadOnly="True"></TextBox>
-                    <RadioButton Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center"  Command="{Binding Path=DataContext.CopyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"  CommandParameter="Plain" Content="Copy Plain Text" />
-                    <RadioButton Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding Path=DataContext.CopyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="Json" Content="Copy JSON Text"/>
-                    <RadioButton Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding Path=DataContext.CopyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="Html" Content="Copy HTML Text" />
-                </Grid>
-            </DataTemplate>
-        </DataGrid.RowDetailsTemplate>
-
-        <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding ID}"  Header="Post ID"  IsReadOnly="True"   />
-            <DataGridTextColumn Binding="{Binding Title}"  Header="Post Title" IsReadOnly="True"  />
-        </DataGrid.Columns>
-
-    </DataGrid>
-            <Paging:PageControl></Paging:PageControl>
-    </StackPanel>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Detail: " Grid.Row="0" Grid.Column="0" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Body}" Background="Transparent"  BorderThickness="0" IsTabStop="False" IsReadOnly="True"></TextBox>
+                            <RadioButton Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center"  Command="{Binding Path=DataContext.CopyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"  CommandParameter="Plain" Content="Copy Plain Text" />
+                            <RadioButton Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding Path=DataContext.CopyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="Json" Content="Copy JSON Text"/>
+                            <RadioButton Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding Path=DataContext.CopyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="Html" Content="Copy HTML Text" />
+                        </Grid>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding ID}"  Header="Post ID"  IsReadOnly="True"   />
+                    <DataGridTextColumn Binding="{Binding Title}"  Header="Post Title" IsReadOnly="True" Width="*"  />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Paging:PageControl DepPostList="{Binding DataContext.PostList,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay}" ></Paging:PageControl>
+        </StackPanel>
     </ScrollViewer>
 </Window>

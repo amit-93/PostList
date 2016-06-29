@@ -18,33 +18,26 @@ namespace PostList.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
         ObservableCollection<PostData> postList;
-        ObservableCollection<PostData> PagingPostList;
         PostData selectedItem;
         HttpResponseMessage Response = null;
-        int start = 0;
-        int end = 0;
-        int itemCount = 5;
-        int totalItems = 0;
-        ICommand pageCommand;
- 
-
-        private ICommand _CopyCommand;
+        ICommand _CopyCommand;
 
         public ICommand CopyCommand
         {
             get
             {
-              return _CopyCommand;   
+                return _CopyCommand;
             }
 
-            set {
+            set
+            {
 
                 _CopyCommand = value;
-              }
+            }
         }
 
 
-       
+
         public PostData SelectedItem
         {
             get
@@ -63,9 +56,10 @@ namespace PostList.ViewModels
         }
 
 
-        public  ObservableCollection<PostData> PostList
+        public ObservableCollection<PostData> PostList
         {
-            get {
+            get
+            {
                 return postList;
             }
             set
@@ -85,13 +79,10 @@ namespace PostList.ViewModels
         public void Init()
         {
             CopyCommand = new RelayCommand(new Action<object>(CopyContent));
-
             //read config file
             ReadConfig();
             // call to fetch post list
-            PagingPostList = GetPostList();
-            //paging
-            ReloadPostList(Constant.First);
+            PostList = GetPostList();
         }
 
 
@@ -118,34 +109,34 @@ namespace PostList.ViewModels
         {
 
             ObservableCollection<PostData> PostList = null;
-             try
-             {
+            try
+            {
 
-                 Response = HttpRequestUtil.HttpClientRequest(AppConfig.ConfigValue[Constant.WebAPIServer], AppConfig.ConfigValue[Constant.PostListURL]);
-                 if (Response == null)
-                 {
-                     ExceptionHandling.ShowException(Constant.Error);
-                     return PostList;
-                 }
-                 if (Response.IsSuccessStatusCode)
-                     PostList = new ObservableCollection<PostData>(Response.Content.ReadAsAsync<IEnumerable<PostData>>().Result.ToList());
-                 else
-                     ExceptionHandling.ShowException(Response.ReasonPhrase);
-             }
+                Response = HttpRequestUtil.HttpClientRequest(AppConfig.ConfigValue[Constant.WebAPIServer], AppConfig.ConfigValue[Constant.PostListURL]);
+                if (Response == null)
+                {
+                    ExceptionHandling.ShowException(Constant.Error);
+                    return PostList;
+                }
+                if (Response.IsSuccessStatusCode)
+                    PostList = new ObservableCollection<PostData>(Response.Content.ReadAsAsync<IEnumerable<PostData>>().Result.ToList());
+                else
+                    ExceptionHandling.ShowException(Response.ReasonPhrase);
+            }
 
-             catch (Exception ex)
-             {
+            catch (Exception ex)
+            {
 
-                 ExceptionHandling.ShowException(ex.Message);
-             
-             }
+                ExceptionHandling.ShowException(ex.Message);
+
+            }
 
             return PostList;
 
 
         }
 
-        private void OnPropertyChanged([CallerMemberName]string PropertName="")
+        private void OnPropertyChanged([CallerMemberName]string PropertName = "")
         {
             var temp = PropertyChanged;
             if (temp != null)
@@ -158,124 +149,34 @@ namespace PostList.ViewModels
         {
             IFormatter IFormat;
 
-            if(CopyCommand==null)
+            if (CopyCommand == null)
             {
                 return;
             }
 
-             string Format = CopyCommand.ToString();
-             try
-             {
-                 IFormat = Formatter.GetFormatter(Format);
+            string Format = CopyCommand.ToString();
+            try
+            {
+                IFormat = Formatter.GetFormatter(Format);
 
-                 if (IFormat == null)
-                 {
-                     ExceptionHandling.ShowException(Constant.Error);
-                     return;
-                 }
+                if (IFormat == null)
+                {
+                    ExceptionHandling.ShowException(Constant.Error);
+                    return;
+                }
 
-                 Clipboard.SetText(IFormat.GetData(SelectedItem));
-             }
-            catch(Exception ex)
-             {
-                 ExceptionHandling.ShowException(ex.Message);
+                Clipboard.SetText(IFormat.GetData(SelectedItem));
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandling.ShowException(ex.Message);
             }
         }
-
-
 
         #endregion private method
 
 
-        #region paging
 
-        public int Start
-        {
-            get
-            {
-                return start + 1;
-            }
-            set
-            {
-                start = value;
-                OnPropertyChanged();
-            }
-        }
-        public int End
-        {
-            get { return end; }
-            set
-            {
-                end = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int TotalItems
-        {
-            get { return totalItems; }
-            set
-            {
-                totalItems = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand PageCommand
-        {
-            set
-            {
-                pageCommand = value;
-            }
-
-            get
-            {
-                if (pageCommand == null)
-                {
-                    pageCommand = new RelayCommand(new Action<object>(ReloadPostList));
-                }
-
-                return pageCommand;
-            }
-        }
-
-        private void ReloadPostList(object command)
-        {
-            PostList = new ObservableCollection<PostData>();
-            totalItems = PagingPostList.Count;
-
-
-
-
-
-            switch (command.ToString())
-            {
-                case Constant.First: Start = 0;
-                    break;
-                case Constant.Next: Start = start + itemCount;
-                    if (Start > totalItems - itemCount)
-                        Start = totalItems - itemCount;
-                    break;
-                case Constant.Previous: Start = start - itemCount;
-                    if (Start <= 0)
-                        Start = 0;
-                    break;
-                case Constant.Last: Start = (totalItems / itemCount - 1) * itemCount;
-                    break;
-
-            }
-
-            End = start + itemCount < totalItems ? start + itemCount : totalItems;
-
-            int LoopCount = start + itemCount;
-
-            for (int i = start; i < LoopCount; i++)
-            {
-                PostList.Add(PagingPostList[i]);
-            }
-        }
-
-        #endregion paging
 
     }
 }

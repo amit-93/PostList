@@ -24,6 +24,7 @@ namespace PostList
         public const string Previous = "Previous";
         public const string Last = "Last";
         public const string Next = "Next";
+        public const string ItemCount = "ItemCount";
         
 
     }
